@@ -5,12 +5,13 @@ import { Script } from 'forge-std/Script.sol';
 import { IPolygonZkEvmBridge, PolygonZkEvm, Arbitrum, Optimism, IArbitrumBridge, IOPBridge } from '../contracts/interfaces/IBridges.sol';
 import { TestWallets } from './Wallet.s.sol';
 
-contract BridgeZkEvm is Script {
+string constant key = 'PRIVATE_KEY';
+
+contract BridgeZkEvm is TestWallets {
   IPolygonZkEvmBridge internal zkEvmBridge;
 
-  function run() external {
-    vm.startBroadcast(vm.envUint('PRIVATE_KEY_EXTERNAL'));
-    address user = vm.addr(vm.envUint('PRIVATE_KEY_EXTERNAL'));
+  function run() external broadcastWithKey(key) {
+    address user = getAddr(key);
     zkEvmBridge = IPolygonZkEvmBridge(PolygonZkEvm.BRIDGE_GOERLI);
     uint256 toBridge = 1 ether;
 
@@ -22,37 +23,30 @@ contract BridgeZkEvm is Script {
       true,
       ''
     );
-    vm.stopBroadcast();
   }
 }
 
-contract BridgeArbitrum is Script {
+contract BridgeArbitrum is TestWallets {
   IArbitrumBridge internal arbitrumBridge;
 
-  function run() external {
-    vm.startBroadcast(vm.envUint('PRIVATE_KEY_EXTERNAL'));
-    // address user = vm.addr(vm.envUint('PRIVATE_KEY_EXTERNAL'));
-
+  function run() external broadcastWithKey(key) {
     arbitrumBridge = IArbitrumBridge(Arbitrum.BRIDGE_GOERLI);
     uint256 toBridge = 0.1 ether;
 
     arbitrumBridge.depositEth{ value: toBridge }();
-    vm.stopBroadcast();
   }
 }
 
-contract BridgeOptimism is Script {
+contract BridgeOptimism is TestWallets {
   IOPBridge internal opBridge;
 
-  function run() external {
-    vm.startBroadcast(vm.envUint('PRIVATE_KEY_EXTERNAL'));
-    address to = vm.addr(vm.envUint('PRIVATE_KEY_EXTERNAL'));
+  function run() external broadcastWithKey(key) {
+    address to = getAddr(key);
 
     opBridge = IOPBridge(Optimism.BRIDGE_GOERLI);
-    uint256 toBridge = 0.1 ether;
+    uint256 amount = 0.1 ether;
 
-    opBridge.depositETHTo{ value: toBridge }(to, 200000, '');
-    vm.stopBroadcast();
+    opBridge.depositETHTo{ value: amount }(to, 200000, '');
   }
 }
 
