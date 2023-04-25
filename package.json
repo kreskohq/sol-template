@@ -9,6 +9,7 @@
     "f:test": "dotenv forge test",
     "hh:test": "hardhat test",
     "test": "dotenv forge test && hardhat test",
+    "update-env": "blackbox_edit_end .env && blackbox_decrypt_file .env",
     "postinstall": "forge install"
   },
   "repository": {
