@@ -40,8 +40,8 @@ contract BridgeArbitrum is TestWallets {
 contract BridgeOptimism is TestWallets {
   IOPBridge internal opBridge;
 
-  function run() external broadcastWithKey(key) {
-    address to = getAddr(key);
+  function run() external broadcastWithMnemonic(0) {
+    address to = getAddr(0);
 
     opBridge = IOPBridge(Optimism.BRIDGE_GOERLI);
     uint256 amount = 0.1 ether;
