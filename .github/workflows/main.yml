@@ -19,7 +19,7 @@ jobs:
         with:
           version: nightly
 
-      - run: forge install
+      - run: forge install https://github.com/kreskohq/kresko-foundry-helpers
 
       - run: forge test
         env:
