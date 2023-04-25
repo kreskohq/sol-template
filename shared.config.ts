@@ -272,7 +272,7 @@ export const testnets = (
   },
 });
 
-export const rpc = (network: Networks, provider: RPCProvider = 'pokt') => {
+export const rpc = (network: Networks, provider: RPCProvider = 'alchemy') => {
   try {
     switch (provider) {
       case 'pokt':
@@ -284,7 +284,7 @@ export const rpc = (network: Networks, provider: RPCProvider = 'pokt') => {
       case 'omnia':
         return omnia(network);
       default:
-        return pokt(network);
+        return alchemy(network);
     }
   } catch {
     return publicRPC(network);
@@ -462,10 +462,11 @@ export const infura = (network: Networks) => {
   if (network === 'optimismGoerli') infuraId = 'optimism-goerli';
   if (network === 'arbitrum') infuraId = 'arbitrum-mainnet';
   if (network === 'arbitrumGoerli') infuraId = 'arbitrum-goerli';
+  if (network === 'avax') infuraId = 'avalanche-mainnet';
+  if (network === 'celo') infuraId = 'celo-mainnet';
+  if (network === 'aurora') infuraId = 'aurora-mainnet';
   if (network === 'polygon') infuraId = 'polygon-mainnet';
   if (network === 'polygonMumbai') infuraId = 'polygon-mumbai';
-  if (network === 'polygonZkEvm') infuraId = 'polygonzkevm-mainnet';
-  if (network === 'polygonZkEvmTestnet') infuraId = 'polygonzkevm-testnet';
   return `https://${infuraId}.infura.io/v3/${infuraKey}`;
 };
 
