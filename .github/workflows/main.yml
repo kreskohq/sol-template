@@ -19,8 +19,6 @@ jobs:
         with:
           version: nightly
 
-      - run: forge build
-
       - run: forge test
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
