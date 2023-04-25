@@ -21,6 +21,10 @@ jobs:
 
       - run: forge test
         env:
+          RPC_MAINNET_ALCHEMY: ${{ secrets.RPC_MAINNET_ALCHEMY }}
+          RPC_GOERLI_ALCHEMY: ${{ secrets.RPC_GOERLI_ALCHEMY }}
+          RPC_OPTIMISM_ALCHEMY: ${{ secrets.RPC_OPTIMISM_ALCHEMY }}
+          RPC_OPTIMISM_GOERLI_ALCHEMY: ${{ secrets.RPC_OPTIMISM_GOERLI_ALCHEMY }}
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           PRIVATE_KEY_TESTNET: ${{ secrets.PRIVATE_KEY_TESTNET }}
           MNEMONIC: ${{ secrets.MNEMONIC }}
@@ -69,6 +73,10 @@ jobs:
 
       - run: pnpm hh:test
         env:
+          RPC_MAINNET_ALCHEMY: ${{ secrets.RPC_MAINNET_ALCHEMY }}
+          RPC_GOERLI_ALCHEMY: ${{ secrets.RPC_GOERLI_ALCHEMY }}
+          RPC_OPTIMISM_ALCHEMY: ${{ secrets.RPC_OPTIMISM_ALCHEMY }}
+          RPC_OPTIMISM_GOERLI_ALCHEMY: ${{ secrets.RPC_OPTIMISM_GOERLI_ALCHEMY }}
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           PRIVATE_KEY_TESTNET: ${{ secrets.PRIVATE_KEY_TESTNET }}
           MNEMONIC: ${{ secrets.MNEMONIC }}
