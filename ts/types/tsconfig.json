@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "composite": true
+  },
+  "include": ["./typechain/**/*.ts"],
+  "exclude": ["node_modules", "dist", "build", "bin", "lib"]
+}

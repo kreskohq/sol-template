@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "module": "esnext",
+    "types": ["./ts/types/globals.d.ts"],
+    "moduleResolution": "nodenext",
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  },
+  "ts-node": {
+    "swc": true,
+    "include": ["ts"],
+    "experimentalSpecifierResolution": "node",
+    "moduleTypes": {
+      "ts/deploy/*.ts": "cjs",
+      "ts/tests/*.ts": "cjs",
+      "ts/scripts/*.ts": "cjs",
+      "ts/tasks/*.ts": "cjs",
+      "hardhat.config.ts": "cjs",
+      "shared.config.ts": "cjs"
+    },
+    "esm": true,
+    "require": ["tsconfig-paths/register"]
+  },
+  "files": ["hardhat.config.ts", "shared.config.ts"],
+  "include": ["ts/**/*.ts"],
+  "exclude": ["node_modules", "dist", "build", "bin", "lib"],
+  "references": [
+    {
+      "path": "ts/types/tsconfig.json"
+    }
+  ]
+}
