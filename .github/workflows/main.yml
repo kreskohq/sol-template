@@ -19,6 +19,8 @@ jobs:
         with:
           version: nightly
 
+      - run: forge install
+
       - run: forge test
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
