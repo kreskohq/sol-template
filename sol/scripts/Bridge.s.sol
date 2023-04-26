@@ -3,11 +3,11 @@ pragma solidity >=0.8.18;
 
 import { Script } from 'forge-std/Script.sol';
 import { IPolygonZkEvmBridge, PolygonZkEvm, Arbitrum, Optimism, IArbitrumBridge, IOPBridge } from '../contracts/interfaces/IBridges.sol';
-import { TestWallets } from './Wallet.s.sol';
+import { Wallet } from './Wallet.s.sol';
 
 string constant key = 'PRIVATE_KEY';
 
-contract BridgeZkEvm is TestWallets {
+contract BridgeZkEvm is Wallet('MNEMONIC_TESTNET') {
   IPolygonZkEvmBridge internal zkEvmBridge;
 
   function run() external broadcastWithKey(key) {
@@ -26,7 +26,7 @@ contract BridgeZkEvm is TestWallets {
   }
 }
 
-contract BridgeArbitrum is TestWallets {
+contract BridgeArbitrum is Wallet('MNEMONIC_TESTNET') {
   IArbitrumBridge internal arbitrumBridge;
 
   function run() external broadcastWithKey(key) {
@@ -37,20 +37,20 @@ contract BridgeArbitrum is TestWallets {
   }
 }
 
-contract BridgeOptimism is TestWallets {
+contract BridgeOptimism is Wallet('MNEMONIC_TESTNET') {
   IOPBridge internal opBridge;
 
-  function run() external broadcastWithMnemonic(0) {
+  function run() external broadcastWithKey('PRIVATE_KEY') {
     address to = getAddr(0);
 
     opBridge = IOPBridge(Optimism.BRIDGE_GOERLI);
-    uint256 amount = 0.1 ether;
+    uint256 amount = 150 ether;
 
     opBridge.depositETHTo{ value: amount }(to, 200000, '');
   }
 }
 
-contract BridgeAll is TestWallets {
+contract BridgeAll is Wallet('MNEMONIC_TESTNET') {
   IOPBridge internal opBridge;
   IArbitrumBridge internal arbitrumBridge;
   IPolygonZkEvmBridge internal zkEvmBridge;
