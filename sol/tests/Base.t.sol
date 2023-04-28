@@ -1,35 +1,35 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import { Test } from 'forge-std/Test.sol';
-import { Ghost } from '../contracts/Ghost.sol';
+import { HelperBase, TestLib } from './Util.t.sol';
 
-contract Base is Test {
-  Ghost public deployMain;
-  Ghost public deployTest;
+contract TestBase is HelperBase('MNEMONIC_TESTNET') {
+  using TestLib for TestLib.AssetParams;
 
-  // the identifiers of the forks
-  uint256 internal mainnet;
-  uint256 internal testnet;
+  /**
+   * @dev Execute on 'optimismGoerli' fork
+   */
+  function setUp() public fork('optimismGoerli') {}
 
-  function setUp() public {
-    mainnet = vm.createSelectFork(vm.rpcUrl('mainnet'));
-    testnet = vm.createSelectFork(vm.rpcUrl('goerli'));
-
-    vm.selectFork(mainnet);
-    deployMain = new Ghost();
-    vm.selectFork(testnet);
-    deployTest = new Ghost();
+  /**
+   * @dev check we are forking
+   */
+  function testKresko() public {
+    assertGt(opgoerli().Kresko.minterInitializations(), 0);
   }
 
   /**
-   * @dev Execute on forks
+   * @dev modifier to check helper setup
    */
-  function testBoo() public {
-    vm.selectFork(mainnet);
-    assertEq(deployMain.boo(), 'Boo!');
+  function testHelper() public checkSetup {}
 
-    vm.selectFork(testnet);
-    assertEq(deployTest.boo(), 'Boo!');
+  /**
+   * @dev modifier to check helper setup
+   */
+  function testAnother() public withUsers(20, 21, 22) {
+    (users, test) = create(TestLib.AssetParams(opgoerli().KISS, 10000 ether));
+    assertEq(test.asset.balanceOf(users.user0), 10000 ether);
+    assertEq(test.asset.balanceOf(users.user1), 10000 ether);
+    assertEq(test.asset.balanceOf(users.user2), 10000 ether);
   }
 }
