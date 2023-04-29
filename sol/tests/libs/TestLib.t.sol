@@ -12,6 +12,7 @@ library TestLib {
     IERC20 asset;
     uint256 assetAmount;
   }
+
   struct Users {
     address user0;
     address user1;
@@ -86,6 +87,32 @@ library TestLib {
     );
   }
 
+  function quoteA(
+    AssetParams storage self,
+    address token,
+    uint256 amount
+  ) internal view returns (uint256) {
+    (uint256 reserveA, uint256 reserveB, ) = self.pair.getReserves();
+    (address tokenA, address tokenB) = self.sortTokens();
+    return
+      token == tokenA
+        ? UniswapV2Library.quote(amount, reserveB, reserveA)
+        : UniswapV2Library.quote(amount, reserveA, reserveB);
+  }
+
+  function quoteB(
+    AssetParams storage self,
+    address token,
+    uint256 amount
+  ) internal view returns (uint256) {
+    (uint256 reserveA, uint256 reserveB, ) = self.pair.getReserves();
+    (address tokenA, address tokenB) = self.sortTokens();
+    return
+      token == tokenA
+        ? UniswapV2Library.quote(amount, reserveA, reserveB)
+        : UniswapV2Library.quote(amount, reserveB, reserveA);
+  }
+
   function sortTokens(
     AssetParams storage self,
     address pairToken
@@ -124,18 +151,9 @@ library TestLib {
     IUniswapV2Pair pair = IUniswapV2Pair(
       OPGOERLI.UniswapV2Factory.getPair(address(self.asset), pairToken)
     );
-    (uint256 reserveA, uint256 reserveB, ) = pair.getReserves();
     (address tokenA, address tokenB) = sortTokens(self, pairToken);
-
     uint256 amountAsset = (self.asset.balanceOf(user) * pct) / 100;
-    uint256 amountOther;
-
-    bool isAssetA = tokenA == address(self.asset);
-    if (isAssetA) {
-      amountOther = UniswapV2Library.quote(amountAsset, reserveA, reserveB);
-    } else {
-      amountOther = UniswapV2Library.quote(amountAsset, reserveB, reserveA);
-    }
+    uint256 amountOther = self.quoteB(tokenA, amountAsset);
 
     OPGOERLI.UniswapV2Router.addLiquidity(
       tokenA,
