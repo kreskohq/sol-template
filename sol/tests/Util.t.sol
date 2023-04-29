@@ -3,7 +3,7 @@ pragma solidity >=0.8.19;
 
 import { Test } from 'forge-std/Test.sol';
 import { Wallet } from '../scripts/Wallet.s.sol';
-import { TestLib, Deployments } from './lib/TestLib.t.sol';
+import { TestLib, Deployments } from './libs/TestLib.t.sol';
 
 abstract contract TestWallet is Wallet, Test {
   // solhint-disable-next-line no-empty-blocks
@@ -28,7 +28,7 @@ abstract contract TestWallet is Wallet, Test {
   }
 }
 
-abstract contract HelperBase is Deployments, TestWallet {
+abstract contract TestBase is Deployments, TestWallet {
   using TestLib for TestLib.AssetParams;
 
   modifier fork(string memory f) {

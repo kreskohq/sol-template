@@ -1,4 +1,3 @@
-
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 
@@ -8,18 +7,17 @@ import { UniswapV2Library } from 'kresko-helpers/vendor/uniswapV2/UniswapV2Libra
 import { UniswapV2LiquidityMathLibrary } from 'kresko-helpers/vendor/uniswapV2/UniswapV2LiquidityMathLibrary.sol';
 import { FixedPoint } from 'kresko-helpers/libs/FixedPoint.sol';
 
-
-
 library TestLib {
   struct AssetParams {
-  IERC20 asset;
-  uint256 assetAmount;
-}
-struct Users {
-  address user0;
-  address user1;
-  address user2;
-}
+    IERC20 asset;
+    uint256 assetAmount;
+  }
+  struct Users {
+    address user0;
+    address user1;
+    address user2;
+  }
+
   using FixedPoint for FixedPoint.Unsigned;
 
   function exitKreskoAsset(address user, address asset) internal {
