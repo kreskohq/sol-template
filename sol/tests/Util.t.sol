@@ -60,7 +60,7 @@ abstract contract TestBase is Deployments, TestWallet {
   /* ----------------------------- Test the setup ----------------------------- */
 
   function check() internal withUsers(10, 11, 12) {
-    (users, test) = create(TestLib.AssetParams(opgoerli().KISS, 10000 ether));
+    (users, test) = createUsers(TestLib.AssetParams(opgoerli().KISS, 10000 ether));
 
     assertEq(users.user0, getAddr(10), '!u0');
     assertEq(users.user1, getAddr(11), '!u1');
@@ -69,11 +69,24 @@ abstract contract TestBase is Deployments, TestWallet {
     assertEq(users.user0.balance, 10 ether, '!u0eth');
     assertEq(users.user1.balance, 10 ether, '!u1eth');
     assertEq(users.user2.balance, 10 ether, '!u2eth');
+
+    (address user0, TestLib.AssetParams memory test0) = createUser(getAddr(20), test);
+    assertEq(user0, getAddr(20), '!u0');
+    assertEq(opgoerli().KISS.balanceOf(user0), 10000 ether, '!u0dai');
+    assertEq(user0.balance, 10 ether, '!u0deth');
   }
 
   /* ------------------------------- Create test ------------------------------ */
+  function createUser(
+    address _user,
+    TestLib.AssetParams memory _test
+  ) public returns (address user, TestLib.AssetParams memory) {
+    createBalance(_test, _user);
+    createApprovals(_test, _user);
+    return (_user, _test);
+  }
 
-  function create(
+  function createUsers(
     TestLib.AssetParams memory _test
   ) public returns (TestLib.Users memory, TestLib.AssetParams memory) {
     createBalance(_test, users.user0);
@@ -104,5 +117,7 @@ abstract contract TestBase is Deployments, TestWallet {
 
     params.asset.approve(address(opgoerli().UniswapV2Router), MAX);
     params.asset.approve(address(opgoerli().Kresko), MAX);
+    params.asset.approve(address(opgoerli().Staking), MAX);
+    params.asset.approve(address(opgoerli().StakingHelper), MAX);
   }
 }

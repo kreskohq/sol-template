@@ -20,6 +20,7 @@ library TestLib {
   }
 
   using FixedPoint for FixedPoint.Unsigned;
+  using TestLib for TestLib.AssetParams;
 
   function exitKreskoAsset(address user, address asset) internal {
     // 1. repay debt
@@ -87,37 +88,45 @@ library TestLib {
     );
   }
 
-  function quoteA(
-    AssetParams storage self,
-    address token,
-    uint256 amount
-  ) internal view returns (uint256) {
-    (uint256 reserveA, uint256 reserveB, ) = self.pair.getReserves();
-    (address tokenA, address tokenB) = self.sortTokens();
-    return
-      token == tokenA
-        ? UniswapV2Library.quote(amount, reserveB, reserveA)
-        : UniswapV2Library.quote(amount, reserveA, reserveB);
-  }
-
-  function quoteB(
-    AssetParams storage self,
-    address token,
-    uint256 amount
-  ) internal view returns (uint256) {
-    (uint256 reserveA, uint256 reserveB, ) = self.pair.getReserves();
-    (address tokenA, address tokenB) = self.sortTokens();
-    return
-      token == tokenA
-        ? UniswapV2Library.quote(amount, reserveA, reserveB)
-        : UniswapV2Library.quote(amount, reserveB, reserveA);
-  }
-
   function sortTokens(
     AssetParams storage self,
     address pairToken
   ) internal view returns (address, address) {
     return UniswapV2Library.sortTokens(address(self.asset), pairToken);
+  }
+
+  function quoteA(
+    AssetParams storage self,
+    address pairToken,
+    address quoteToken,
+    uint256 amount
+  ) internal view returns (uint256) {
+    IUniswapV2Pair pair = IUniswapV2Pair(
+      OPGOERLI.UniswapV2Factory.getPair(address(self.asset), pairToken)
+    );
+    (uint256 reserveA, uint256 reserveB, ) = pair.getReserves();
+    (address tokenA, address tokenB) = self.sortTokens(pairToken);
+    return
+      quoteToken != tokenA
+        ? UniswapV2Library.quote(amount, reserveA, reserveB)
+        : UniswapV2Library.quote(amount, reserveB, reserveA);
+  }
+
+  function quoteB(
+    AssetParams storage self,
+    address pairToken,
+    address quoteToken,
+    uint256 amount
+  ) internal view returns (uint256) {
+    IUniswapV2Pair pair = IUniswapV2Pair(
+      OPGOERLI.UniswapV2Factory.getPair(address(self.asset), pairToken)
+    );
+    (uint256 reserveA, uint256 reserveB, ) = pair.getReserves();
+    (address tokenA, address tokenB) = self.sortTokens(pairToken);
+    return
+      quoteToken == tokenA
+        ? UniswapV2Library.quote(amount, reserveA, reserveB)
+        : UniswapV2Library.quote(amount, reserveB, reserveA);
   }
 
   function getLPValue(
@@ -153,8 +162,8 @@ library TestLib {
     );
     (address tokenA, address tokenB) = sortTokens(self, pairToken);
     uint256 amountAsset = (self.asset.balanceOf(user) * pct) / 100;
-    uint256 amountOther = self.quoteB(tokenA, amountAsset);
-
+    uint256 amountOther = self.quoteB(tokenA, tokenA, amountAsset);
+    bool isAssetA = tokenA == address(self.asset);
     OPGOERLI.UniswapV2Router.addLiquidity(
       tokenA,
       tokenB,

@@ -27,7 +27,7 @@ contract TestBaseTest is TestBase('MNEMONIC_TESTNET') {
    * @dev modifier to check helper setup
    */
   function testAnother() public withUsers(20, 21, 22) {
-    (users, test) = create(TestLib.AssetParams(opgoerli().KISS, 10000 ether));
+    (users, test) = createUsers(TestLib.AssetParams(opgoerli().KISS, 10000 ether));
     assertEq(test.asset.balanceOf(users.user0), 10000 ether);
     assertEq(test.asset.balanceOf(users.user1), 10000 ether);
     assertEq(test.asset.balanceOf(users.user2), 10000 ether);
