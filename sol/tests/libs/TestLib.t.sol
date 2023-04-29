@@ -44,7 +44,7 @@ library TestLib {
       OPGOERLI.UniswapV2Factory.getPair(address(self.asset), pairToken)
     );
     (uint256 reserve0, uint256 reserve1, ) = pair.getReserves();
-    if (address(self.asset) == pair.token0()) {
+    if (address(self.asset) == pair.token1()) {
       return UniswapV2Library.quote(1 ether, reserve1, reserve0);
     }
     return UniswapV2Library.quote(1 ether, reserve0, reserve1);
