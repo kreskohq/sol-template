@@ -70,7 +70,7 @@ abstract contract TestBase is Deployments, TestWallet {
     assertEq(users.user1.balance, 10 ether, '!u1eth');
     assertEq(users.user2.balance, 10 ether, '!u2eth');
 
-    (address user0, TestLib.AssetParams memory test0) = createUser(getAddr(20), test);
+    (address user0, ) = createUser(getAddr(20), test);
     assertEq(user0, getAddr(20), '!u0');
     assertEq(opgoerli().KISS.balanceOf(user0), 10000 ether, '!u0dai');
     assertEq(user0.balance, 10 ether, '!u0deth');

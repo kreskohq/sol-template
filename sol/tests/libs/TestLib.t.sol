@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.0;
+pragma solidity <=0.8.20;
 
 import { IERC20 } from 'kresko-helpers/vendor/IERC20.sol';
 import { OPGOERLI, IUniswapV2Pair, Deployments } from 'kresko-helpers/Deployments.sol';
@@ -105,7 +105,7 @@ library TestLib {
       OPGOERLI.UniswapV2Factory.getPair(address(self.asset), pairToken)
     );
     (uint256 reserveA, uint256 reserveB, ) = pair.getReserves();
-    (address tokenA, address tokenB) = self.sortTokens(pairToken);
+    (address tokenA, ) = self.sortTokens(pairToken);
     return
       quoteToken != tokenA
         ? UniswapV2Library.quote(amount, reserveA, reserveB)
@@ -122,7 +122,7 @@ library TestLib {
       OPGOERLI.UniswapV2Factory.getPair(address(self.asset), pairToken)
     );
     (uint256 reserveA, uint256 reserveB, ) = pair.getReserves();
-    (address tokenA, address tokenB) = self.sortTokens(pairToken);
+    (address tokenA, ) = self.sortTokens(pairToken);
     return
       quoteToken == tokenA
         ? UniswapV2Library.quote(amount, reserveA, reserveB)
@@ -157,9 +157,6 @@ library TestLib {
     address pairToken,
     uint256 pct
   ) internal {
-    IUniswapV2Pair pair = IUniswapV2Pair(
-      OPGOERLI.UniswapV2Factory.getPair(address(self.asset), pairToken)
-    );
     (address tokenA, address tokenB) = sortTokens(self, pairToken);
     uint256 amountAsset = (self.asset.balanceOf(user) * pct) / 100;
     uint256 amountOther = self.quoteB(tokenA, tokenA, amountAsset);
