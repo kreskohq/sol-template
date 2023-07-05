@@ -5,7 +5,7 @@ import { IERC20 } from 'kresko-helpers/vendor/IERC20.sol';
 import { OPGOERLI, IUniswapV2Pair, Deployments } from 'kresko-helpers/Deployments.sol';
 import { UniswapV2Library } from 'kresko-helpers/vendor/uniswapV2/UniswapV2Library.sol';
 import { UniswapV2LiquidityMathLibrary } from 'kresko-helpers/vendor/uniswapV2/UniswapV2LiquidityMathLibrary.sol';
-import { FixedPoint } from 'kresko-helpers/libs/FixedPoint.sol';
+import { WadRay } from 'kresko-helpers/libs/WadRay.sol';
 
 library TestLib {
   struct AssetParams {
@@ -18,8 +18,7 @@ library TestLib {
     address user1;
     address user2;
   }
-
-  using FixedPoint for FixedPoint.Unsigned;
+  using WadRay for uint256;
   using TestLib for TestLib.AssetParams;
 
   function exitKreskoAsset(address user, address asset) internal {
@@ -53,24 +52,15 @@ library TestLib {
   }
 
   function assetPriceOracle(AssetParams storage self) internal view returns (uint256) {
-    FixedPoint.Unsigned memory price = OPGOERLI.Kresko.getKrAssetValue(
-      address(self.asset),
-      1 ether,
-      true
-    );
-    return price.rawValue;
+    return OPGOERLI.Kresko.getKrAssetValue(address(self.asset), 1 ether, true);
   }
 
   function getKrAssetDebtValue(
     AssetParams storage self,
     address user
   ) internal view returns (uint256) {
-    FixedPoint.Unsigned memory priceAsset = OPGOERLI.Kresko.getKrAssetValue(
-      address(self.asset),
-      1 ether,
-      true
-    );
-    return priceAsset.mul(self.asset.balanceOf(user)).rawValue;
+    uint256 priceAsset = OPGOERLI.Kresko.getKrAssetValue(address(self.asset), 1 ether, true);
+    return priceAsset.wadMul(self.asset.balanceOf(user));
   }
 
   function removeAllLiquidity(AssetParams storage self, address user, address pairToken) internal {
