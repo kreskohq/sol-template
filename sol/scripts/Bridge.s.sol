@@ -11,9 +11,9 @@ contract BridgeZkEvm is ScriptBase('MNEMONIC_TESTNET') {
   }
 }
 
-contract BridgeArbitrum is ScriptBase('MNEMONIC_TESTNET') {
-  function run() external broadcastWithKey('PRIVATE_KEY') {
-    uint256 amount = 0.05 ether;
+contract BridgeArbitrum is ScriptBase('MNEMONIC_TESTNET_OLD') {
+  function run() external broadcastWithMnemonic(0) {
+    uint256 amount = 75 ether;
     goerli_ext().depositArbitrum(amount);
   }
 }

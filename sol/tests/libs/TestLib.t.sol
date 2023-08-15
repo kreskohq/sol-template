@@ -7,7 +7,7 @@ import { UniswapV2Library } from 'kresko-helpers/vendor/uniswapV2/UniswapV2Libra
 import { UniswapV2LiquidityMathLibrary } from 'kresko-helpers/vendor/uniswapV2/UniswapV2LiquidityMathLibrary.sol';
 import { WadRay } from 'kresko-helpers/libs/WadRay.sol';
 
-library TestLib {
+library KreskoHelpers {
   struct AssetParams {
     IERC20 asset;
     uint256 assetAmount;
@@ -19,7 +19,7 @@ library TestLib {
     address user2;
   }
   using WadRay for uint256;
-  using TestLib for TestLib.AssetParams;
+  using KreskoHelpers for KreskoHelpers.AssetParams;
 
   function exitKreskoAsset(address user, address asset) internal {
     // 1. repay debt

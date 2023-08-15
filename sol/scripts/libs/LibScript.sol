@@ -8,6 +8,8 @@ struct ExternalContracts {
   IWETH NATIVEW;
   IWETH ETHW;
   IERC20 USDC;
+  IERC20 USDCE;
+  IERC20 GLP;
   IERC20 USDT;
   IERC20 DAI;
   IPolygonZkEvmBridge zkEvmBridge;
