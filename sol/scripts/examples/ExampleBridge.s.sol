@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.18;
 
-import { ScriptBase } from './Utils.s.sol';
+import { ScriptBase } from 'utils/forge/ScriptBase.sol';
 
 contract BridgeZkEvm is ScriptBase('MNEMONIC_TESTNET') {
   function run() external broadcastWithKey('PRIVATE_KEY') {
@@ -29,7 +29,6 @@ contract BridgeOptimism is ScriptBase('MNEMONIC_TESTNET') {
 
 contract BridgeAll is ScriptBase('MNEMONIC_TESTNET') {
   function run() external broadcastWithMnemonic(0) {
-    address to = getAddr('PRIVATE_KEY');
     uint256 amount = 0.05 ether;
     goerli_ext().multibridge(amount);
   }

@@ -2,9 +2,9 @@
 pragma solidity ^0.8.0;
 
 import { Test } from 'forge-std/Test.sol';
-import { Ghost } from '../contracts/Ghost.sol';
+import { Ghost } from 'contracts/Ghost.sol';
 
-contract TestBase is Test {
+contract ForksTest is Test {
   Ghost public deployMain;
   Ghost public deployTest;
 
@@ -25,7 +25,7 @@ contract TestBase is Test {
   /**
    * @dev Execute on forks
    */
-  function testBoo() public {
+  function testMultipleForks() public {
     vm.selectFork(mainnet);
     assertEq(deployMain.boo(), 'Boo!');
 
