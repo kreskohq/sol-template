@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import { TestWallet } from 'utils/forge/TestWallet.sol';
+import { LibTest } from './LibTest.sol';
 
 abstract contract TestBase is TestWallet {
   address public user0;
