@@ -4,6 +4,10 @@
   "rules": {
     "compiler-version": ["warn", "^0.8.0"],
     "func-visibility": ["warn", { "ignoreConstructors": true }],
-    "quotes": ["error", "single"]
+    "quotes": ["error", "single"],
+    "private-vars-leading-underscore": "off",
+    "contract-name-camelcase": "off",
+    "state-visibility": "off",
+    "func-name-mixedcase": "off"
   }
 }
